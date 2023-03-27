@@ -130,15 +130,14 @@ Status delivery_run_plan(FILE *pf, Delivery *d, p_element_print fprint, p_elemen
   }
   
 
-  fprintf(pf, "\nRunning delivery plan for queue:\n");
+  fprintf(pf, "\n\nRunning delivery plan for queue:\n");
   queue_print(pf, d->plan, fprint);
   
   for(i=0; queue_isEmpty(d->plan)==FALSE; i++){
     aux=queue_pop(d->plan);
-    fprintf(pf, "Delivering %s requested by %s to", d->product_name, d->name);
+    fprintf(pf, "\nDelivering %s requested by %s to ", d->product_name, d->name);
     fprint(stdout, aux);
     ffree(aux);
-    fputs("\n",pf);
   }
   
   return OK;
