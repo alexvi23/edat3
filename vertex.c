@@ -187,23 +187,15 @@ void * vertex_copy (const void * src){
 }
 
 int vertex_print (FILE * pf, const void * v){
-  const Vertex *v1;
-  int i;
-  char pal[TAG_LENGHT];
+  char pal[MAX_ELEM];
+  Vertex *v1;
   if(!pf||!v){
     return -1;
   }
-  v1=v;
+  v1=(Vertex*)v;
+  sprintf(pal,"[%ld, %s, %d, %d]",v1->id,v1->tag,v1->state,v1->index);
+  fprintf(pf,"%s",pal);
 
-  fprintf(pf,"[");
-  fprintf(pf,"%ld,",v1->id);
-  fprintf(pf," %s,",v1->tag);
-  fprintf(pf," %d,",v1->state);
-  fprintf(pf," %d", v1->index);
-  fprintf(pf,"]");
-  
-  for(i=0;fscanf(pf,"%s",pal)==1;i++);
-
-  return i;
+  return strlen(pal);
 }
 

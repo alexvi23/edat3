@@ -14,7 +14,6 @@
 
 #include "vertex.h"
 #include "stack.h"
-#include "queue.h"
 #include <string.h>
 
 typedef struct _Graph Graph;

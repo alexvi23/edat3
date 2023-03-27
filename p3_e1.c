@@ -16,14 +16,12 @@ Delivery* build_delivery(FILE *pf){
     }
     
     fscanf(pf, "%s %s", aux_name, aux_productName);
-    printf("%s %s\n", aux_name, aux_productName);
     d=delivery_init(aux_name, aux_productName);
     if(!d){
         fclose(pf);
         return NULL;
     }
     num=fscanf(pf, "%d\n", &num);
-    printf("%d\n",num);
 
     for(i=0; fgets(str, TAG_LENGHT, pf)!=NULL; i++){
         v=vertex_initFromString(str);
@@ -42,7 +40,6 @@ int main(int argc, char **argv){
     if(!f){
         return -1;
     }
-
     d=build_delivery(f);
     if(!d){
         return -1;
@@ -53,7 +50,7 @@ int main(int argc, char **argv){
     }
     fprintf(stdout, "\n");
 
-    
+
     delivery_free((void*)d);
 
     return 0;
