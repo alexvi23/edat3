@@ -328,6 +328,7 @@ void _graph_setVertexState (Graph *g, Label l){
 		vertex_setState(g->vertices[i],l);
 	}
 }
+
 Status graph_depthSearch (Graph *g, long from_id, long to_id){
     Status st=OK;
     Stack *s;
@@ -345,12 +346,16 @@ Status graph_depthSearch (Graph *g, long from_id, long to_id){
     stack_push(s, (long int*)from_id);
 
     while((stack_isEmpty(s)==FALSE) && st==OK){
+        
         aux_id=stack_pop(s);
         if(vertex_getState(g->vertices[graph_getNumFromId(g, (long int)aux_id)])==WHITE){
+            
             vertex_setState(g->vertices[graph_getNumFromId(g, (long int)aux_id)], BLACK);
             ids = graph_getConnectionsFromId(g, (long int)aux_id);
+            
             for(i=0; i<graph_getNumberOfConnectionsFromId(g, (long int)aux_id); i++){
                 if(vertex_getState(g->vertices[graph_getNumFromId(g, ids[i])])==WHITE){
+                    
                     if(stack_push(s, (void*)ids[i])==ERROR){
                         st=ERROR;
                     }
