@@ -14,13 +14,13 @@ p3_e1: $(OBJECTSP3E1)
 	$(CC) $(CFLAGS) -o p3_e1 $(OBJECTSP3E1)
 
 p3_e2a:$(OBJECTSP3E2A)
-	$(CC) $(CFLAGS) -o p3_e2 $(OBJECTSP3E2)
+	$(CC) $(CFLAGS) -o p3_e2a $(OBJECTSP3E2A)
 
 p3_e1.o: p3_e1.c vertex.h delivery.h file_utils.h
 	$(CC) $(CFLAGS) -c p3_e1.c
 
-p3_e2a.o: p3_e2.c vertex.h delivery.h file_utils.h
-	$(CC) $(CFLAGS) -c p3_e2.c
+p3_e2a.o: p3_e2a.c vertex.h delivery.h file_utils.h
+	$(CC) $(CFLAGS) -c p3_e2a.c
 	
 stack.o: stack.c stack.h
 	$(CC) $(CFLAGS) -c stack.c
