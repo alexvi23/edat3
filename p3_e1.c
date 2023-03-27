@@ -50,7 +50,6 @@ int main(int argc, char **argv){
     }
     fprintf(stdout, "\n");
 
-
     delivery_free((void*)d);
 
     return 0;
