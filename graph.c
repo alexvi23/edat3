@@ -386,12 +386,12 @@ Status graph_breathSearch (Graph *g, long from_id, long to_id){
     }
     _graph_setVertexState(g, WHITE);
 
-    q=queue_init();
-    queue_push(s, (long int*)from_id);
+    q=queue_new();
+    queue_push(q, (long int*)from_id);
 
-    while((queue_isEmpty(s)==FALSE) && st==OK){
+    while((queue_isEmpty(q)==FALSE) && st==OK){
         
-        aux_id=queue_pop(s);
+        aux_id=queue_pop(q);
         if(vertex_getState(g->vertices[graph_getNumFromId(g, (long int)aux_id)])==WHITE){
             
             vertex_setState(g->vertices[graph_getNumFromId(g, (long int)aux_id)], BLACK);
@@ -400,7 +400,7 @@ Status graph_breathSearch (Graph *g, long from_id, long to_id){
             for(i=0; i<graph_getNumberOfConnectionsFromId(g, (long int)aux_id); i++){
                 if(vertex_getState(g->vertices[graph_getNumFromId(g, ids[i])])==WHITE){
                     
-                    if(queue_push(s, (void*)ids[i])==ERROR){
+                    if(queue_push(q, (void*)ids[i])==ERROR){
                         st=ERROR;
                     }
                 }
@@ -413,6 +413,7 @@ Status graph_breathSearch (Graph *g, long from_id, long to_id){
         free(ids);
     }
     
-    queue_free(s);
+    queue_free(q);
     return st;
 }
+
