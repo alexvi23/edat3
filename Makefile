@@ -2,10 +2,10 @@
 ########################################################
 CC=gcc
 CFLAGS= -g -Wall -pedantic
-EJS = p3_e1 p3_e2
+EJS = p3_e1 p3_e2a
 ########################################################
 OBJECTSP3E1 = p3_e1.o delivery.o file_utils.o libqueue.a vertex.o
-OBJECTSP3E2 = p3_e2.o delivery.o file_utils.o queue.o vertex.o
+OBJECTSP3E2A = p3_e2a.o delivery.o file_utils.o queue.o vertex.o
 ########################################################
 
 all: $(EJS)
@@ -13,13 +13,13 @@ all: $(EJS)
 p3_e1: $(OBJECTSP3E1)
 	$(CC) $(CFLAGS) -o p3_e1 $(OBJECTSP3E1)
 
-p3_e2:$(OBJECTSP3E2)
+p3_e2a:$(OBJECTSP3E2A)
 	$(CC) $(CFLAGS) -o p3_e2 $(OBJECTSP3E2)
 
 p3_e1.o: p3_e1.c vertex.h delivery.h file_utils.h
 	$(CC) $(CFLAGS) -c p3_e1.c
 
-p3_e2.o: p3_e2.c vertex.h delivery.h file_utils.h
+p3_e2a.o: p3_e2.c vertex.h delivery.h file_utils.h
 	$(CC) $(CFLAGS) -c p3_e2.c
 	
 stack.o: stack.c stack.h
