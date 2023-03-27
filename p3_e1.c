@@ -30,7 +30,6 @@ Delivery* build_delivery(FILE *pf){
         delivery_add(stdout, d, (void*)v, vertex_print);
     }
 
-    queue_print(stdout, delivery_getPlan(d), vertex_print);
     fclose(pf);
 
     return d;
