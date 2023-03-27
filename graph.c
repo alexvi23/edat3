@@ -367,3 +367,47 @@ Status graph_depthSearch (Graph *g, long from_id, long to_id){
     stack_free(s);
     return st;
 }
+
+Status graph_breathSearch (Graph *g, long from_id, long to_id){
+    Status st=OK;
+    Queue *q;
+    long *ids;
+    void *aux_id;
+    int i;
+    
+    if(!g){
+        st=ERROR;
+        return st;
+    }
+    _graph_setVertexState(g, WHITE);
+
+    q=queue_init();
+    queue_push(s, (long int*)from_id);
+
+    while((queue_isEmpty(s)==FALSE) && st==OK){
+        
+        aux_id=queue_pop(s);
+        if(vertex_getState(g->vertices[graph_getNumFromId(g, (long int)aux_id)])==WHITE){
+            
+            vertex_setState(g->vertices[graph_getNumFromId(g, (long int)aux_id)], BLACK);
+            ids = graph_getConnectionsFromId(g, (long int)aux_id);
+            
+            for(i=0; i<graph_getNumberOfConnectionsFromId(g, (long int)aux_id); i++){
+                if(vertex_getState(g->vertices[graph_getNumFromId(g, ids[i])])==WHITE){
+                    
+                    if(queue_push(s, (void*)ids[i])==ERROR){
+                        st=ERROR;
+                    }
+                }
+            }
+        }
+        
+        if((long int)aux_id==to_id){
+            break;
+        }
+        free(ids);
+    }
+    
+    queue_free(s);
+    return st;
+}
