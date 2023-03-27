@@ -9,7 +9,7 @@ Delivery* build_delivery(FILE *pf){
     Delivery* d;
     char aux_name[MAX_PAL], aux_productName[MAX_PAL], str[MAX_PAL];
     int num, i;
-    Vertex *v[MAX_ELEM];
+    Vertex *v;
     
     if(!pf){
         return NULL;
@@ -25,15 +25,10 @@ Delivery* build_delivery(FILE *pf){
     num=fscanf(pf, "%d\n", &num);
     printf("%d\n",num);
 
-    for(i=0; fgets(str, TAG_LENGHT, pf); i++){
-        v[i]=vertex_initFromString(str);
-        delivery_add(stdout, d, (void*)v[i], vertex_print);
+    for(i=0; fgets(str, TAG_LENGHT, pf)!=NULL; i++){
+        v=vertex_initFromString(str);
+        delivery_add(stdout, d, (void*)v, vertex_print);
     }
-
-    for(; i>=0; i--){
-        vertex_free(v[i]);
-    }
-
 
     queue_print(stdout, delivery_getPlan(d), vertex_print);
     fclose(pf);
@@ -59,6 +54,7 @@ int main(int argc, char **argv){
     }
     fprintf(stdout, "\n");
 
+    
     delivery_free((void*)d);
 
     return 0;

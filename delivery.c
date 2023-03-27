@@ -123,20 +123,22 @@ Status delivery_add(FILE *pf, Delivery *d, void *p, p_element_print f){
 }
 
 Status delivery_run_plan(FILE *pf, Delivery *d, p_element_print fprint, p_element_free ffree){
+  void *aux;
+  int i;
   if(!pf||!d){
     return ERROR;
   }
-  void *aux[MAX_ELEM];
-  int i;
+  
 
   fprintf(pf, "\n\nRunning delivery plan for queue:\n");
   queue_print(pf, d->plan, fprint);
   fprintf(pf, "\n");
   
   for(i=0; queue_isEmpty(d->plan)==FALSE; i++){
-    aux[i]=queue_pop(d->plan);
-    fprintf(pf, "Delivering %s requested by %s to ", d->product_name, d->name);
-    fprint(stdout, aux[i]);
+    aux=queue_pop(d->plan);
+    fprintf(pf, "\nDelivering %s requested by %s to ", d->product_name, d->name);
+    fprint(stdout, aux);
+    ffree(aux);
   }
   
   return OK;
