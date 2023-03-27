@@ -14,6 +14,7 @@
 #define TYPES_H_
 
 #define MAX_ELEM 1024
+#define MAX_QUEUE 100
 
 /**
  * @brief ADT Boolean
