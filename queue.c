@@ -1,3 +1,5 @@
+#include <stdio.h>
+#include <stdlib.h>
 #include "queue.h"
 #define MAX_QUEUE 100
 
