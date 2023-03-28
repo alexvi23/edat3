@@ -22,6 +22,7 @@ int main(int argc, char **argv){
 
     if(graph_readFromFile(f, g)==ERROR){
         fclose(f);
+        graph_free(g);
         return -1;
     }
     from_id=atol(argv[2]);
@@ -30,7 +31,7 @@ int main(int argc, char **argv){
     fprintf(stdout, "Input graph:");
     graph_print(stdout, g);
 
-    fprintf(stdout, "\n--------DFS------------");
+    fprintf(stdout, "\n\n--------DFS------------");
     fprintf(stdout, "\nFrom vertex id: %ld\nTo vertex id: %ld\nOutput:\n", from_id, to_id);
     if(graph_depthSearch(g, from_id, to_id)==OK){
         for(i=0; i<g->num_vertices; i++){
