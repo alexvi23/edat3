@@ -81,6 +81,7 @@ Vertex * vertex_init (){
   v->id=0;
   strcpy(v->tag,"");
   v->state=WHITE;
+  v->index=0;
 
   return v;
 }
@@ -183,6 +184,7 @@ void * vertex_copy (const void * src){
   v->id=src1->id;
   strcpy(v->tag,src1->tag);
   v->state=src1->state;
+  v->index=src1->index;
   return v;
 }
 
@@ -192,10 +194,10 @@ int vertex_print (FILE * pf, const void * v){
   if(!pf||!v){
     return -1;
   }
-  v1=(Vertex*)v;
+  v1=vertex_copy(v);
   sprintf(pal,"[%ld, %s, %d, %d]",v1->id,v1->tag,v1->state,v1->index);
   fprintf(pf,"%s",pal);
 
+  vertex_free(v1);
   return strlen(pal);
 }
-
