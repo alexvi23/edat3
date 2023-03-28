@@ -18,9 +18,18 @@ void _graph_setVertexState (Graph *g, Label l);
 
 Graph * graph_init(){
     Graph *g;
+    int i, j;
     g=(Graph*) malloc(sizeof(Graph));
     if(!g){
         return NULL;
+    }
+    for(i=0; i<MAX_VTX; i++){
+        g->vertices[i]=NULL;
+    }
+    for(i=0; i<MAX_VTX; i++){
+        for(j=0; j<MAX_VTX; j++){
+            g->connections[i][j]=FALSE;
+        }
     }
     g->num_vertices=0;
     g->num_edges=0;
@@ -328,7 +337,6 @@ void _graph_setVertexState (Graph *g, Label l){
 		vertex_setState(g->vertices[i],l);
 	}
 }
-
 Status graph_depthSearch (Graph *g, long from_id, long to_id){
     Status st=OK;
     Stack *s;
@@ -361,12 +369,12 @@ Status graph_depthSearch (Graph *g, long from_id, long to_id){
                     }
                 }
             }
+            free(ids);
         }
         
         if((long int)aux_id==to_id){
             break;
         }
-        free(ids);
     }
     
     stack_free(s);
@@ -405,15 +413,14 @@ Status graph_breathSearch (Graph *g, long from_id, long to_id){
                     }
                 }
             }
+            free(ids);
         }
         
         if((long int)aux_id==to_id){
             break;
         }
-        free(ids);
     }
     
     queue_free(q);
     return st;
 }
-
