@@ -7,15 +7,16 @@
  */
 
 #include "list.h"
+#include <math.h>
 
 /* Define struct */
-typedef struct _NodeList {
+typedef struct _NodeList  {
     void* data;
-    struct _NodeList *next;
-} NodeList;
+    struct _NodeList  *next;
+} NodeList ;
 
 struct _List {
-    NodeList *last;
+    NodeList  *last;
 };
  
 /* Public function that creates a new List */
@@ -46,7 +47,7 @@ Boolean list_isEmpty (const List *pl) {
 
 /* Public function that pushes an element into the front position of a List */
 Status list_pushFront (List *pl , const void *e) {
-  Node *pn = NULL;
+  NodeList *pn = NULL;
   if (pl == NULL || e == NULL) {
     return ERROR;
   }
@@ -72,7 +73,7 @@ Status list_pushFront (List *pl , const void *e) {
 
 /* Public function that pushes an element into the back position of a List */
 Status list_pushBack (List *pl , const void *e) {
-  Node *pn = NULL;
+  NodeList *pn = NULL;
   if (pl == NULL || e == NULL) {
     return ERROR;
   }
@@ -99,7 +100,7 @@ Status list_pushBack (List *pl , const void *e) {
 
 /* Public function that pushes an element into an ordered list */
 Status list_pushInOrder (List *pl, void *e, P_ele_cmp f, int order){
-  Node *pn = NULL , *qn = NULL;
+  NodeList *pn = NULL , *qn = NULL;
   if (pl == NULL || e == NULL) {
     return ERROR;
   }
@@ -110,8 +111,12 @@ Status list_pushInOrder (List *pl, void *e, P_ele_cmp f, int order){
   }
   pn->data = (void *)e;
 
-  if(order>0){
+  if(fabs(order)>list_size(pl)){
+    return ERROR;
+  }
 
+  if(order>0){
+    
   }
   else if(order<0){
 
@@ -127,7 +132,7 @@ Status list_pushInOrder (List *pl, void *e, P_ele_cmp f, int order){
 
 /* Public function that pops the front element from a List */
 void * list_popFront (List *pl) {
-  Node *pn = NULL;
+  NodeList *pn = NULL;
   void *pe = NULL;
   if (pl == NULL || clist_isEmpty (pl) == TRUE) {
     return NULL;
@@ -149,7 +154,7 @@ void * list_popFront (List *pl) {
 
 /* Public function that pops the back element from a List */
 void * list_popBack (List *pl) {
-  Node *pn = NULL;
+  NodeList *pn = NULL;
   void *pe = NULL;
   if (pl == NULL || clist_isEmpty (pl) == TRUE) {
     return NULL;
@@ -191,7 +196,7 @@ void list_free (List *pl) {
 
 size_t list_size(const List *pl){
   int i=0;
-  NodeList *node;
+  NodeList  *node;
   if(!pl||list_isEmpty){
     return i;
   }
@@ -204,7 +209,7 @@ size_t list_size(const List *pl){
 }
 
 int list_print(FILE *fp, const List *pl, P_ele_print f){
-  NodeList *qn=NULL;
+  NodeList  *qn=NULL;
   int i,total,res;
   if(!pf||!pl||!f){
     return -1;
