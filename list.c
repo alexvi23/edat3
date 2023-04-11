@@ -14,6 +14,20 @@ struct _List {
   NodeList *last;
 };
 
+size_t list_size(const List *pl){
+  int i=0;
+  NodeList *node;
+  if(!pl||list_isEmpty){
+    return i;
+  }
+  node=pl->last;
+  do{
+    i++;
+    node=node->next,
+  }while(node!=pl->last);
+  return i;
+}
+
 int list_print(FILE *fp, const List *pl, P_ele_print f){
   NodeList *qn=NULL;
   int i,total,res;
