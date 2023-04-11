@@ -48,8 +48,6 @@ int main(int argc, char **argv){
     if(delivery_run_plan(stdout, d, vertex_print, vertex_free)==ERROR){
         return -1;
     }
-    fprintf(stdout, "\n");
-
 
     delivery_free((void*)d);
 

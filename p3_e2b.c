@@ -10,6 +10,11 @@ int main(int argc, char **argv){
     int i;
     long from_id, to_id;
 
+    if(!argv[2]||!argv[3]){
+        fprintf(stderr,"Error, falta de argumentos para ejecutar el programa\n");
+        return 0;
+    }
+
     f=fopen(argv[1], "r");
     if(f==NULL){
         return -1;
@@ -25,6 +30,7 @@ int main(int argc, char **argv){
         graph_free(g);
         return -1;
     }
+    
     from_id=atol(argv[2]);
     to_id=atol(argv[3]);
 

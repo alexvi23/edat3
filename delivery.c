@@ -135,8 +135,9 @@ Status delivery_run_plan(FILE *pf, Delivery *d, p_element_print fprint, p_elemen
   
   for(i=0; queue_isEmpty(d->plan)==FALSE; i++){
     aux=queue_pop(d->plan);
-    fprintf(pf, "\nDelivering %s requested by %s to ", d->product_name, d->name);
+    fprintf(pf, "Delivering %s requested by %s to ", d->product_name, d->name);
     fprint(stdout, aux);
+    fprintf(stdout,"\n");
     ffree(aux);
   }
   
