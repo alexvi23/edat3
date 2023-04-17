@@ -9,16 +9,20 @@
 #include "list.h"
 #include <math.h>
 
-/* Define struct */
-typedef struct _NodeList  {
-    void* data;
-    struct _NodeList  *next;
-} NodeList ;
+NodeList *node_new() {
+  NodeList *pn = NULL;
 
-struct _List {
-    NodeList  *last;
-};
- 
+  pn = malloc(sizeof(NodeList));
+  if (!pn) {
+    return NULL;
+  }
+
+  pn->data = NULL;
+  pn->next = NULL;
+
+  return pn;
+}
+
 /* Public function that creates a new List */
 List *list_new () {
   List *pl = NULL;
@@ -33,7 +37,7 @@ List *list_new () {
 }
 
 /* Public function that checks if a List is empty */
-Boolean list_isEmpty (const List *pl) {
+Bool list_isEmpty (const List *pl) {
   if (pl == NULL) {
     return TRUE;
   }
@@ -46,8 +50,9 @@ Boolean list_isEmpty (const List *pl) {
 }
 
 /* Public function that pushes an element into the front position of a List */
-Status list_pushFront (List *pl , const void *e) {
-  NodeList *pn = NULL;
+// Delante de last
+Status list_pushFront(List *pl, void *e){
+  NodeList *pn;
   if (pl == NULL || e == NULL) {
     return ERROR;
   }
@@ -57,9 +62,9 @@ Status list_pushFront (List *pl , const void *e) {
     return ERROR;
   }
 
-  pn ->data = (void *)e;
+  pn ->data = e;
 
-  if ( clist_isEmpty (pl)) {
+  if (list_isEmpty(pl)) {
     pn ->next = pn;
     pl ->last = pn;
   } 
@@ -72,7 +77,8 @@ Status list_pushFront (List *pl , const void *e) {
 }
 
 /* Public function that pushes an element into the back position of a List */
-Status list_pushBack (List *pl , const void *e) {
+// Delante de last
+Status list_pushBack(List *pl, void *e){
   NodeList *pn = NULL;
   if (pl == NULL || e == NULL) {
     return ERROR;
@@ -83,9 +89,9 @@ Status list_pushBack (List *pl , const void *e) {
     return ERROR;
   }
 
-  pn ->data = (void *)e;
+  pn ->data = e;
 
-  if ( clist_isEmpty (pl) == TRUE) {
+  if ( list_isEmpty (pl) == TRUE) {
     pn ->next = pn;
     pl ->last = pn;
   } 
@@ -100,8 +106,8 @@ Status list_pushBack (List *pl , const void *e) {
 
 /* Public function that pushes an element into an ordered list */
 Status list_pushInOrder (List *pl, void *e, P_ele_cmp f, int order){
-  NodeList *pn = NULL , *qn = NULL;
-  if (pl == NULL || e == NULL) {
+  NodeList *pn = NULL , *qn = NULL, *rn = NULL;
+  if (pl == NULL || e == NULL || order==0) {
     return ERROR;
   }
 
@@ -109,22 +115,53 @@ Status list_pushInOrder (List *pl, void *e, P_ele_cmp f, int order){
   if(pn == NULL){
     return ERROR;
   }
-  pn->data = (void *)e;
+  pn->data = e;
 
-  if(fabs(order)>list_size(pl)){
-    return ERROR;
-  }
+  if ( list_isEmpty (pl) == TRUE) {
+    pn ->next = pn;
+    pl ->last = pn;
 
-  if(order>0){
-    
-  }
-  else if(order<0){
-
-  }
-  else{
-    if(list_pushBack(pl, e)==ERROR){
-      return ERROR;
+    return OK;
+  } 
+  if(list_size(pl) == 1){
+    if(order>0){
+      list_pushBack(pl, e);
+    } else {
+      list_pushFront(pl, e);
     }
+    free(pn);
+    return OK;
+  }
+
+  if((f(pn->data, pl->last->data) >= 0 && order>0) || (f(pn->data, pl->last->data) <= 0 && order<0)){
+    list_pushBack(pl, e);
+
+    return OK;
+  }
+  if(order>0){
+    qn=pl->last;
+    do {
+      rn=qn->next;
+      if(f(pn->data, rn->data) <= 0){
+        pn->next=rn;
+        qn->next=pn;
+
+        return OK;
+      }
+      qn = qn->next;
+    } while(qn->data != pl->last->data);
+  } else{
+    qn=pl->last;
+    do {
+      rn=qn->next;
+      if(f(pn->data, rn->data) >= 0){
+        pn->next=rn;
+        qn->next=pn;
+
+        return OK;
+      }
+      qn = qn->next;
+    } while(qn->data != pl->last->data);
   }
 
   return OK;
@@ -134,7 +171,7 @@ Status list_pushInOrder (List *pl, void *e, P_ele_cmp f, int order){
 void * list_popFront (List *pl) {
   NodeList *pn = NULL;
   void *pe = NULL;
-  if (pl == NULL || clist_isEmpty (pl) == TRUE) {
+  if (pl == NULL || list_isEmpty(pl) == TRUE) {
     return NULL;
   }
   
@@ -147,7 +184,6 @@ void * list_popFront (List *pl) {
   else {
     pl ->last ->next = pn ->next;
   }
-
   free(pn);
   return pe;
 }
@@ -156,7 +192,7 @@ void * list_popFront (List *pl) {
 void * list_popBack (List *pl) {
   NodeList *pn = NULL;
   void *pe = NULL;
-  if (pl == NULL || clist_isEmpty (pl) == TRUE) {
+  if (pl == NULL || list_isEmpty(pl) == TRUE) {
     return NULL;
   }
 
@@ -187,8 +223,8 @@ void list_free (List *pl) {
     return;
   }
 
-  while ( list_isEmpty (pl) == FALSE) {
-    list_popFront (pl);
+  while (list_isEmpty(pl) == FALSE) {
+    free(list_popFront (pl));
   }
 
   free(pl);
@@ -197,31 +233,37 @@ void list_free (List *pl) {
 size_t list_size(const List *pl){
   int i=0;
   NodeList  *node;
-  if(!pl||list_isEmpty){
+  if(!pl||list_isEmpty(pl)){
     return i;
   }
   node=pl->last;
   do{
     i++;
-    node=node->next,
-  }while(node!=pl->last);
+    node=node->next;
+  } while(node!=pl->last);
   return i;
 }
 
 int list_print(FILE *fp, const List *pl, P_ele_print f){
   NodeList  *qn=NULL;
-  int i,total,res;
-  if(!pf||!pl||!f){
+  int total=0,res;
+  if(!fp||!pl||!f||list_isEmpty(pl)){
     return -1;
   }
-  qn=pl->first;
-  while(qn!=NULL){
+  qn=pl->last;
+  do {
+    qn = qn->next;
     res=f(fp,qn->data);
+    //printf("last [+%d] %f\n", total, *(float *)qn->data);
     if(res<0){
       return res;
     }
-    total+=f(fp,qn->data);
-    qn = qn->next;
-  }
+    total+=res;
+    /*qn = qn->next;
+    printf("next [+%d] %f\n", total, *(float *)qn->data);
+    total++;
+    printf("\n\n");*/
+  } while(qn->data != pl->last->data);
+  fprintf(fp, "\n");
   return total;
 }

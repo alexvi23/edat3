@@ -51,7 +51,7 @@ file_utils.o:file_utils.c file_utils.h
 queue.o:queue.c queue.h
 	$(CC) $(CFLAGS) -c queue.c
 
-list.o: list.c list.h
+list.o: list.c list.h file_utils.h
 	$(CC) $(CFLAGS) -c list.c
 
 clear:

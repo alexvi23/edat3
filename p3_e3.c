@@ -4,21 +4,21 @@
 #include "list.h"
 
 int main(int argc,char *argv[]){
-    int i,num,j=1,tam;
+    int i,num,j=1,tam, k=0;
     FILE *f;
     List *pl;
     List *pl2;
-    void *aux,*aux2;
+    float *elements[MAX_ELEM], scan;
 
-    if(argc<3){
+    if(argc<2){
         fprintf(stdout, "Error");
         return 0;
     }
-    f=fopen(argv[2],"r");
+    f=fopen(argv[1],"r");
     if(!f){
         return 0;
     }
-    num=atoi(argv[3]);
+    num=atoi(argv[2]);
     pl=list_new();
     if(!pl){
         fclose(f);
@@ -31,42 +31,48 @@ int main(int argc,char *argv[]){
         return 0;
     }
     
-    fscanf(f, "%d", &tam);
-	while(fscanf(f, "%f", (float*)aux)==1){
-		aux2=float_init(aux);
+    fscanf(f, "%d", &tam); // Número de elementos
+	while(fscanf(f, "%f", &scan)==1){
+		elements[k]=float_init(scan);
         if(j%2==0){
-            list_pushFront(pl, (void*)aux2);
+            list_pushFront(pl, (void*)elements[k]);
         }
         else{
-            list_pushBack(pl,(void*)aux2);
+            list_pushBack(pl,(void*)elements[k]);
         }
+        j++;
+        k++;
 	}
 
-    if(tam==(int)list_size(pl)){
-        fprintf(stdout, "Error");
-        return 0;
-    }
-    fprintf(stdout,"SIZE:%d",tam);
+    fprintf(stdout,"SIZE:%d\n",tam);
     list_print(stdout,pl,float_print);
 
     fprintf(stdout, "\nFinished inserting. Now we extract from the beginning and insert in order:\n");
-    for(i=0;i<tam/2;i++){
-        aux=list_popFront(pl);
-        float_print(stdout, aux);
-        list_pushInOrder(pl2,aux,float_cmp,num);
+    for(i=0;i<tam/2;i++,k++){
+        elements[k]=(float*)list_popFront(pl);
+        float_print(stdout, (void*)elements[k]);
+        //printf("\n");
+        list_pushInOrder(pl2,(void*)elements[k],float_cmp,num);
+        //list_print(stdout,pl2,float_print);
     }
 
     fprintf(stdout, "\nNow we extract from the end and insert in order:\n");
     while(list_isEmpty(pl)==FALSE){
-        aux=list_popBack(pl);
-        float_print(stdout, aux);
-        list_pushInOrder(pl2,aux,float_cmp,num); 
+        elements[k]=list_popBack(pl);
+        float_print(stdout, elements[k]);
+        //printf("\n");
+        list_pushInOrder(pl2,elements[k],float_cmp,num);
+        //list_print(stdout,pl2,float_print);
+        k++;
     }
 
-    fprintf(stdout,"SIZE:%d",tam);
-    list_print(stdout,pl,float_print);
+    fprintf(stdout,"\n\nSIZE:%d\n",tam);
+    list_print(stdout,pl2,float_print);
 
-    float_free(aux2);
+    list_free(pl);
+    list_free(pl2);
+
+    fclose(f);
 
     return 0;
 }

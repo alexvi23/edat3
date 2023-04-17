@@ -25,13 +25,29 @@
 #define	LIST_H
 
 #include "types.h"
+#include "file_utils.h"
 #include <stdio.h>
 #include <stdlib.h>
 
 /**
  * List type definition: a list of arbitrary elements.
  */
+/* Define struct */
+typedef struct _NodeList  {
+    void* data;
+    struct _NodeList  *next;
+} NodeList ;
+typedef struct _NodeList NodeList;
+
+struct _List {
+    NodeList  *last;
+};
+
 typedef struct _List List;
+
+/* Function that creates a node (should be private, but it's not for this
+ * assignment, so that it can be used by the requested functions)*/
+NodeList *node_new();
 
 /**
  * P_ele_print type definition: pointer to a function that prints a List element to
