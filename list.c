@@ -138,31 +138,17 @@ Status list_pushInOrder (List *pl, void *e, P_ele_cmp f, int order){
 
     return OK;
   }
-  if(order>0){
-    qn=pl->last;
-    do {
-      rn=qn->next;
-      if(f(pn->data, rn->data) <= 0){
-        pn->next=rn;
-        qn->next=pn;
+  qn=pl->last;
+  do {
+    rn=qn->next;
+    if((f(pn->data, rn->data) <= 0 && order>0) || (f(pn->data, rn->data) >= 0 && order<0)){
+      pn->next=rn;
+      qn->next=pn;
 
-        return OK;
-      }
-      qn = qn->next;
-    } while(qn->data != pl->last->data);
-  } else{
-    qn=pl->last;
-    do {
-      rn=qn->next;
-      if(f(pn->data, rn->data) >= 0){
-        pn->next=rn;
-        qn->next=pn;
-
-        return OK;
-      }
-      qn = qn->next;
-    } while(qn->data != pl->last->data);
-  }
+      return OK;
+    }
+    qn = qn->next;
+  } while(qn->data != pl->last->data);
 
   return OK;
 }
@@ -254,15 +240,10 @@ int list_print(FILE *fp, const List *pl, P_ele_print f){
   do {
     qn = qn->next;
     res=f(fp,qn->data);
-    //printf("last [+%d] %f\n", total, *(float *)qn->data);
     if(res<0){
       return res;
     }
     total+=res;
-    /*qn = qn->next;
-    printf("next [+%d] %f\n", total, *(float *)qn->data);
-    total++;
-    printf("\n\n");*/
   } while(qn->data != pl->last->data);
   fprintf(fp, "\n");
   return total;

@@ -51,18 +51,14 @@ int main(int argc,char *argv[]){
     for(i=0;i<tam/2;i++,k++){
         elements[k]=(float*)list_popFront(pl);
         float_print(stdout, (void*)elements[k]);
-        //printf("\n");
         list_pushInOrder(pl2,(void*)elements[k],float_cmp,num);
-        //list_print(stdout,pl2,float_print);
     }
 
     fprintf(stdout, "\nNow we extract from the end and insert in order:\n");
     while(list_isEmpty(pl)==FALSE){
         elements[k]=list_popBack(pl);
         float_print(stdout, elements[k]);
-        //printf("\n");
         list_pushInOrder(pl2,elements[k],float_cmp,num);
-        //list_print(stdout,pl2,float_print);
         k++;
     }
 
